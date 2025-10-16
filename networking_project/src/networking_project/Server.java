@@ -24,8 +24,12 @@ public class Server {
             byte[] fishData = { (byte) 0b10000000,
             					(byte) 0b00010000,
             					(byte) 0b01000000,
+            					(byte) 0b00000100,
+            					(byte) 0b00010000,
+            					(byte) 0b00000001,
+            					(byte) 0b01000000,
             					(byte) 0b00000100
-            				};
+            				}; //This needs to be seeded with some set of initial values
             
             while (true) {
             	//Wait 1 second
