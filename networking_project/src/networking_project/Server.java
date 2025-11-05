@@ -24,11 +24,11 @@ public class Server {
             byte[] fishData = { (byte) 0b10000000,
             					(byte) 0b00010000,
             					(byte) 0b01000000,
-            					(byte) 0b00000100,
+            					(byte) 0b10000100,
             					(byte) 0b00010000,
             					(byte) 0b00000001,
             					(byte) 0b01000000,
-            					(byte) 0b00000100
+            					(byte) 0b00100100
             				}; //This needs to be seeded with some set of initial values
             
             while (true) {
@@ -40,9 +40,10 @@ public class Server {
                 // Move all the fish
                 for(int i = 0; i < Globals.fish_count; i++) {
                 	//Check if fish is at right edge
-                	if(fishData[i] == (byte) 0b00000001) {
+                	if((fishData[i] & (byte) 0b00000001) == 1) {
                 		//Wrap around manually
-                		fishData[i] = (byte) 0b10000000;
+                	    fishData[i] = (byte)(Byte.toUnsignedInt(fishData[i]) >>> 1);
+                		fishData[i] = (byte) ( fishData[i] | (byte) 0b10000000 );
                 	}
                 	//If not at right edge
                 	else { fishData[i] = (byte)(Byte.toUnsignedInt(fishData[i]) >>> 1); } //There is no unsigned 8 bit integers in java, so shifting is a pain, in fact working with bytes is a pain in general
