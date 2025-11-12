@@ -19,7 +19,7 @@ public class Client extends Frame {
 	
    private void prepareGUI(){
       setSize(Globals.fish_size*8*Globals.graphics_scale,Globals.fish_size*Globals.fish_count*Globals.graphics_scale);
-      addWindowListener(new java.awt.event.WindowAdapter() {
+      addWindowListener(new java.awt.event.WindowAdapter(){
 		  public void windowClosing(java.awt.event.WindowEvent windowEvent) {
 			  System.exit(0);
 		  }
@@ -33,13 +33,13 @@ public class Client extends Frame {
 	    //Load fish image, we probably dont have to do this every time but meh
 	    BufferedImage fishImg = null;
 	    try {
-	    	fishImg = ImageIO.read(new File("fish.png"));
+	    	fishImg = ImageIO.read(new File("networking_project/fish.png"));
 	    } catch (IOException e) {
 	    	System.out.printf("Couldnt load fish.png :(\n");
 	    }
 	    BufferedImage waterImg = null;
 	    try {
-	    	waterImg = ImageIO.read(new File("water.png"));
+	    	waterImg = ImageIO.read(new File("networking_project/water.png"));
 	    } catch (IOException e) {
 	    	System.out.printf("Couldnt load water.png :(\n");
 	    }
@@ -91,7 +91,7 @@ public class Client extends Frame {
 			while(true) {
 				clientSocket.receive(receivePacket); // Blocks until a packet is received
 				fishData = receivePacket.getData();
-				//displayFish(fishData); //Displays fish in text
+				// displayFish(fishData); //Displays fish in text
 				c.repaint(); //Paints graphics
 			}
 
