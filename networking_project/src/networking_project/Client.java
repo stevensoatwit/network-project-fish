@@ -1,4 +1,6 @@
 package networking_project;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -6,13 +8,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-
 import javax.imageio.ImageIO;
-
-import java.awt.*;
-import java.awt.image.BufferedImage;
-
-import networking_project.Globals;
 
 public class Client extends Frame {
 	
@@ -23,13 +19,12 @@ public class Client extends Frame {
 	
    private void prepareGUI(){
       setSize(Globals.fish_size*8*Globals.graphics_scale,Globals.fish_size*Globals.fish_count*Globals.graphics_scale);
-      //X button, weird error so ignoring for now
-      /*addWindowListener(new WindowAdapter() {
-         public void windowClosing(WindowEvent windowEvent){
-            System.exit(0);
-         }        
-      }); */
-   } 
+      addWindowListener(new java.awt.event.WindowAdapter(){
+		  public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+			  System.exit(0);
+		  }
+	  });
+   }
    
    private static byte[] fishData = new byte[Globals.fish_count];
 	   
@@ -46,13 +41,13 @@ public class Client extends Frame {
 	    //Load fish and water images, we probably dont have to do this every time but meh
 	    BufferedImage fishImg = null;
 	    try {
-	    	fishImg = ImageIO.read(new File("fish.png"));
+	    	fishImg = ImageIO.read(new File("networking_project/fish.png"));
 	    } catch (IOException e) {
 	    	System.out.printf("Couldnt load fish.png :(\n");
 	    }
 	    BufferedImage waterImg = null;
 	    try {
-	    	waterImg = ImageIO.read(new File("water.png"));
+	    	waterImg = ImageIO.read(new File("networking_project/water.png"));
 	    } catch (IOException e) {
 	    	System.out.printf("Couldnt load water.png :(\n");
 	    }
@@ -108,7 +103,7 @@ public class Client extends Frame {
 			while(true) {
 				clientSocket.receive(receivePacket); // Blocks until a packet is received
 				fishData = receivePacket.getData();
-				//displayFish(fishData); //Displays fish in text
+				// displayFish(fishData); //Displays fish in text
 				c.repaint(); //Paints graphics
 			}
 
