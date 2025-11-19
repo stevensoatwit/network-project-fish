@@ -34,8 +34,16 @@ public class Client extends Frame {
    private static byte[] fishData = new byte[Globals.fish_count];
 	   
 	public void paint (Graphics g) {
-	    Graphics2D g2 = (Graphics2D) g.create();
-	    //Load fish image, we probably dont have to do this every time but meh
+	    //Determine size of drawing surface
+	    final int drawWidth = 8 * Globals.fish_size;
+	    final int drawHeight = Globals.fish_count * Globals.fish_size;
+	    
+	    //Create drawing surface, this will be resized to fit the window later
+	    BufferedImage ds = new BufferedImage(drawWidth, drawHeight, BufferedImage.TYPE_INT_ARGB);
+	    //Create a graphics object for the drawing surface
+	    Graphics2D drawG = ds.createGraphics();
+	    
+	    //Load fish and water images, we probably dont have to do this every time but meh
 	    BufferedImage fishImg = null;
 	    try {
 	    	fishImg = ImageIO.read(new File("fish.png"));
@@ -49,9 +57,7 @@ public class Client extends Frame {
 	    	System.out.printf("Couldnt load water.png :(\n");
 	    }
 	    //Draw background
-	    final int windowH = Globals.fish_count * Globals.fish_size * Globals.graphics_scale;
-	    final int windowW = 8 * Globals.fish_size * Globals.graphics_scale;
-	    g2.drawImage(waterImg, 0, 0, windowW, windowH,
+	    drawG.drawImage(waterImg, 0, 0, drawWidth, drawHeight,
 			     0, 0, 256, 256,
 			     null);
 	    //Loop thru each fish byte
@@ -60,16 +66,22 @@ public class Client extends Frame {
 	    	for(int j = 0; j < 8; j++) {
 	    		//Check if theres a fish at this bit
 	    		if(((fishData[i] >> j) & 1) == 1) {
-	    			final int dsize = Globals.fish_size * Globals.graphics_scale;
+	    			final int dsize = Globals.fish_size;
 	    			final int x = (7-j)*dsize;
-	    			final int y = 32 + (i*dsize);
-	    			g2.drawImage(fishImg, x, y, x+dsize, y+dsize,
+	    			final int y = (i*dsize);
+	    			drawG.drawImage(fishImg, x, y, x+dsize, y+dsize,
 	    					     0, 0, Globals.fish_size, Globals.fish_size,
 	    					     null);
 	    		}
 	    	}
 	    }
 	    
+	    //Draw draw surface to the window surface, scaled to fit
+	    final Rectangle windowB = g.getClipBounds();
+	    g.drawImage(ds, 0, 0, windowB.width, windowB.height,
+	                0, 0, drawWidth, drawHeight, null);
+	    
+	    drawG.dispose();
 	    g.dispose();
 	}
 	
